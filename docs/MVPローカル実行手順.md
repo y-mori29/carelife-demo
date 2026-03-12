@@ -1,6 +1,6 @@
-# MVP ローカル実行手順（録音 → 文字起こし → 要約表示）
+# MVP ローカル実行手順（録音 → 文字起こし → 要約 → LINE 送信）
 
-今日の MVP で実装した範囲です。ローカルで「録音 → Speech-to-Text → Gemini 要約 → フロントに表示」まで動かせます。
+ローカルで「録音 → Speech-to-Text → Gemini 要約 → フロントに表示 → LINE に送信」まで動かす手順です。本番（Cloud Run）ではすでに一通り実装・稼働済みです。
 
 ---
 
@@ -64,11 +64,10 @@ npm run dev
 3. **SC-04**: 「録音を始める」→ マイク許可を出す
 4. **SC-05**: 録音中。話した内容が録音される
 5. 「録音を終える」→ 「はい、終了する」
-6. **SC-06** → 次へ
-7. **SC-08**: 補足質問（任意で入力）→ 次へ／確認へ
+6. **SC-08**（補足入力）: 補足質問（任意で入力）→ 次へ／確認へ
 8. **SC-09**: 「報告を作成する」
 9. **SC-10**: 処理中（STT ＋ Gemini 要約）
-10. **SC-11**: **文字起こし**と**通院報告（要約）**が表示される。内容を確認・編集し、「LINEに送信する」で完了
+10. **SC-11**: **文字起こし**と**通院報告（要約）**が表示される。内容を確認・編集し、「LINEに送信する」で LINE に報告を送信（バックエンドに `LINE_CHANNEL_ACCESS_TOKEN` が設定されている場合）。送信後は SC-12 で完了画面。
 
 ---
 
@@ -83,7 +82,7 @@ npm run dev
 
 ---
 
-## 5. 今日の MVP で入っている範囲
+## 5. 実装済みの範囲
 
 - **バックエンド**
   - 録音ファイルを multipart で受信
@@ -91,9 +90,11 @@ npm run dev
   - Speech-to-Text V2（chirp_3, asia-northeast1）で文字起こし
   - Gemini（gemini-3.1-flash-lite-preview）で通院報告風の要約文を生成
   - レスポンスで `transcript` と `reportText` を返却
+  - **LINE 送信**: `POST /api/carelife/send-to-line` で報告文を LINE Push 送信（`LINE_CHANNEL_ACCESS_TOKEN` 必須）
 - **フロントエンド**
   - MediaRecorder で実録音（audio/webm）
   - 録音終了時に Blob を保持し、「報告を作成する」で FormData として送信
-  - SC-11 で「文字起こし」と「通院報告（要約）」の両方を表示
+  - SC-11 で「文字起こし」と「通院報告（要約）」の両方を表示・編集
+  - 「LINEに送信する」でバックエンドの send-to-line API を呼び出し、報告を LINE に送信（Bot が返したリンクの `?userId=...` で送信先を特定）
 
-**LINE 連携**は今回の MVP には含めていません。SC-12「LINEに送信する」は画面遷移のみで、実際の LINE 投稿は今後の実装です。
+**LINE 連携**は本番（Cloud Run）で利用中です。ローカルで LINE に送るには、バックエンドの `.env` に `LINE_CHANNEL_ACCESS_TOKEN` を設定し、フロントは LINE Bot が返したリンク（`?userId=...` 付き）から開いて報告作成〜送信まで行ってください。

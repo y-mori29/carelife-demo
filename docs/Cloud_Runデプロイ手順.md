@@ -22,7 +22,7 @@
 
 ### 2. デプロイ実行
 
-プロジェクトルート（carelife_202603）で:
+プロジェクトルート（リポジトリのルート）で:
 
 ```powershell
 .\scripts\deploy-cloudrun.ps1
