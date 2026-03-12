@@ -1,0 +1,36 @@
+# Dependencies
+node_modules/
+
+# Environment (tokens, secrets)
+.env
+.env.local
+.env.*.local
+backend/sa-key.json
+**/sa-key.json
+
+# Build output
+dist/
+build/
+.next/
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Other workspace copy (embedded repo)
+yorisoi-workspace*/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Cloud / local
+.nyc_output/
+coverage/
+*.tgz

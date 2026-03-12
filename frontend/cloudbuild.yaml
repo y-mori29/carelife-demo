@@ -1,0 +1,22 @@
+# フロントエンド用 Cloud Build（ビルド時に VITE_API_BASE_URL を渡す）
+substitutions:
+  _VITE_API_BASE_URL: ''
+  _REGION: 'asia-northeast1'
+  _REPO: 'carelife-repo'
+
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'build'
+      - '--build-arg'
+      - 'VITE_API_BASE_URL=${_VITE_API_BASE_URL}'
+      - '-t'
+      - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO}/carelife-frontend:latest'
+      - '.'
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
+      - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO}/carelife-frontend:latest'
+
+images:
+  - '${_REGION}-docker.pkg.dev/${PROJECT_ID}/${_REPO}/carelife-frontend:latest'
