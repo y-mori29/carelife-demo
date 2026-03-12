@@ -16,6 +16,22 @@
   - LINE への報告送信（Push メッセージ）
   - LINE Bot による「報告」キーワード／リッチメニューからの報告作成リンク返却
 
+### 本番環境の URL と接続関係
+
+Cloud Run にデプロイ済みの各サービスの URL と、それらのつながり方は以下のとおりです。
+
+| サービス | URL | 役割 |
+|----------|-----|------|
+| **フロントエンド** | https://carelife-frontend-887034737640.asia-northeast1.run.app | 通院報告サポート画面。ユーザーが録音・補足入力・報告確認・LINE 送信を行う入口。 |
+| **バックエンド** | https://carelife-backend-887034737640.asia-northeast1.run.app | 通院報告 API。フロントから録音アップロード・報告生成・LINE 送信リクエストを受け付ける。 |
+| **LINE Bot** | https://carelife-linebot-887034737640.asia-northeast1.run.app | LINE Webhook 用。「報告」等に反応し、上記フロントの URL（`?userId=...` 付き）を返す。 |
+
+**接続の流れ**
+
+1. **LINE → フロント**: ユーザーが LINE で「報告」と送る（またはリッチメニューをタップ）と、Bot が **フロントエンドの URL**（`https://carelife-frontend-887034737640.asia-northeast1.run.app?userId=Uxxxx...`）を返す。ユーザーがそのリンクを開くと報告作成画面が表示される。
+2. **フロント → バックエンド**: 報告画面では、録音送信・報告生成・「LINEに送信する」のリクエストをすべて **バックエンドの URL**（`https://carelife-backend-887034737640.asia-northeast1.run.app`）へ送る。フロントはビルド時にこの URL を `VITE_API_BASE_URL` として埋め込んでいる。
+3. **LINE Developers**: LINE の Webhook URL には **LINE Bot の URL + `/webhook`**（`https://carelife-linebot-887034737640.asia-northeast1.run.app/webhook`）を設定する。
+
 ---
 
 ## 構成

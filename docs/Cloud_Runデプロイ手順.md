@@ -4,6 +4,20 @@
 
 ---
 
+## 本番 URL（デプロイ済み）
+
+| サービス | URL |
+|----------|-----|
+| フロントエンド | https://carelife-frontend-887034737640.asia-northeast1.run.app |
+| バックエンド | https://carelife-backend-887034737640.asia-northeast1.run.app |
+| LINE Bot | https://carelife-linebot-887034737640.asia-northeast1.run.app |
+
+- **フロント** はビルド時に上記バックエンド URL を `VITE_API_BASE_URL` として埋め込み、API 呼び出し先にしている。
+- **LINE Bot** は環境変数 `FRONTEND_URL` に上記フロント URL を設定し、返すリンクのベースにしている。
+- **LINE Developers** の Webhook URL は `https://carelife-linebot-887034737640.asia-northeast1.run.app/webhook` に設定する。
+
+---
+
 ## 前提
 
 - GCP プロジェクト **yorisoi-demo** の環境構築済み（API 有効化・GCS・Artifact Registry・サービスアカウント）
