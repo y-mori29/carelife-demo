@@ -1,6 +1,8 @@
 # LINE Bot が動かないとき — Webhook 設定の確認
 
-@537echua（【開発環境】よりそい）の Messaging API で「報告」やリッチメニューに反応しない場合、**Webhook URL が未設定** であることがほとんどです。
+**本番環境について**: バックエンド・フロントエンド・LINE Bot は Cloud Run にデプロイ済みです。LINE Channel Secret / Channel Access Token は GCP の Cloud Run「変数とシークレット」に登録されており、**LINE Developers の Webhook URL には本番の LINE Bot URL**（`https://carelife-linebot-887034737640.asia-northeast1.run.app/webhook`）**が設定済み**です。通常の利用では追加の Webhook 設定は不要です。
+
+以下は、Webhook が未設定で Bot が反応しない場合の確認手順と、**ローカルで LINE Bot を開発・検証する場合**の参考（ngrok 利用）です。
 
 ---
 
@@ -36,7 +38,9 @@ LINE の「Messaging API設定」で **Webhook URL** が空欄のままでは、
 
 ---
 
-### パターン B：ローカルで line-bot を動かして試す場合
+### パターン B：ローカルで line-bot を動かして開発・検証する場合（参考）
+
+**注意**: 本番は Cloud Run に LINE Bot をデプロイ済みで、Webhook も本番 URL に設定済みです。**動きの確認だけならローカルで Bot を動かす必要はありません。** 以下は、LINE Bot のコードをローカルで変更して試したい場合のみ行います。
 
 LINE の Webhook は **HTTPS** が必須のため、localhost のままでは設定できません。**ngrok** などで HTTPS の URL を用意します。
 

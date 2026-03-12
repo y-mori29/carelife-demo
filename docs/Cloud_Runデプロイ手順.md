@@ -14,7 +14,8 @@
 
 - **フロント** はビルド時に上記バックエンド URL を `VITE_API_BASE_URL` として埋め込み、API 呼び出し先にしている。
 - **LINE Bot** は環境変数 `FRONTEND_URL` に上記フロント URL を設定し、返すリンクのベースにしている。
-- **LINE Developers** の Webhook URL は `https://carelife-linebot-887034737640.asia-northeast1.run.app/webhook` に設定する。
+- **LINE Developers** の Webhook URL は `https://carelife-linebot-887034737640.asia-northeast1.run.app/webhook` に設定する（**本番ではすでに設定済み**）。
+- **環境変数**（LINE トークン、Gemini API キー、GCP 認証など）は **GCP の Cloud Run「変数とシークレット」** で管理されています。デプロイスクリプトが `backend/.env` を読んで渡すこともありますが、稼働中の値は GCP 側の設定です。
 
 ---
 
